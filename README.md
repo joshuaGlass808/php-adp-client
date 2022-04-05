@@ -3,7 +3,7 @@
 ## Getting started
 
 ```zsh
-composer install jlg/php-adp-client
+composer require jlg/php-adp-client
 ```
 
 ## Basic usage

@@ -1,0 +1,23 @@
+{
+    "name": "jg/php-adp-client",
+    "type": "project",
+    "homepage": "https://github.com/joshuaGlass808/php-adp-client",
+    "description": "Simple PHP ADP connection client.",
+    "license": "MIT",
+    "keywords": [
+        "adp",
+        "connections",
+        "jg",
+        "php-adp-client"
+    ],
+    "autoload": {
+        "psr-4": {
+            "ADP\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.4",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "prefer-stable": true
+}

@@ -45,5 +45,6 @@ $workers = ($httpResults) ? $httpResults->workers : [];
 ### Additional Information
   - Please refer to [ADP API Documentation Explorer](https://developers.adp.com/articles/api/hcm-offrg-wfn/apiexplorer "ADP API Explorer") for additional details on request parameters and what to expect from the response.
   - This is using [Guzzle](https://github.com/guzzle/guzzle "Guzzle") for the Http abstraction. You will need to call `->getBody()->getContents()` on the response from one of the methods listed above if you would like to get the contents of the ADP Api response.
+  - If you are missing something in your config or any other type of validation, you will be met with an exception like this: `PHP Fatal error:  Uncaught Jlg\ADP\Exceptions\ADPClientValidationException: [0]: Missing keys from config: server_url`
 
 

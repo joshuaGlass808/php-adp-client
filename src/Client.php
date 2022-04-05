@@ -2,6 +2,8 @@
 
 namespace Jlg\ADP;
 
+use Jlg\ADP\Exceptions\ADPClientValidationException;
+
 use GuzzleHttp\{
     Client as Http,
     Psr7\Response as HttpResponse
@@ -30,6 +32,27 @@ class Client
      */
     public function __construct(array $config)
     {
+        $missing = [];
+        $neededKeys = [
+            'client_id',
+            'client_secret',
+            'org_name',
+            'ssl_cert_path',
+            'ssl_key_path',
+            'server_url'
+        ];
+
+        foreach ($neededKeys as $key) {
+            if (!isset($config[$key])) {
+                $missing[] = $key;
+            }
+        }
+
+        if (!empty($missing)) {
+            $msg = 'Missing keys from config: ' . implode(', ', $missing);
+            throw new ADPClientValidationException($msg);
+        }
+
         $this->baseConfig = $config;
         $this->setConnection();
     }
@@ -45,6 +68,11 @@ class Client
     {
         $this->checkAndResetConnection();
         $callType = strtolower($callType);
+
+        if (!in_array($callType, ['get', 'post'])) {
+            $msg = "Invalid|unsupported http request type {$callType}. Valid options are (get|post)";
+            throw new ADPClientValidationException($msg);
+        }
 
         $http = new Http([
             'headers' => [

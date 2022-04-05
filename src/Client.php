@@ -49,7 +49,7 @@ class Client
             'headers' => [
                 'Authorization' => "{$this->tokenType} {$this->accessToken}",
             ],
-            'base_uri' => $this->baseConfig['token_server_url'],
+            'base_uri' => $this->baseConfig['server_url'],
             'cert'     => $this->baseConfig['ssl_cert_path'],
             'ssl_key'  => $this->baseConfig['ssl_key_path'],
         ]);

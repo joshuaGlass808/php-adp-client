@@ -1,8 +1,6 @@
 # Simple PHP ADP Client
 
-[![Latest Stable Version](https://poser.pugx.org/jlg/php-adp-client/v)](//packagist.org/packages/jlg/php-adp-client)
-[![License](https://poser.pugx.org/jlg/php-adp-client/license)](//packagist.org/packages/jlg/php-adp-client)
-[![Total Downloads](https://poser.pugx.org/jlg/php-adp-client/downloads)](//packagist.org/packages/jlg/php-adp-client)
+[![Latest Stable Version](http://poser.pugx.org/jlg/php-adp-client/v)](https://packagist.org/packages/jlg/php-adp-client) [![Total Downloads](http://poser.pugx.org/jlg/php-adp-client/downloads)](https://packagist.org/packages/jlg/php-adp-client) [![License](http://poser.pugx.org/jlg/php-adp-client/license)](https://packagist.org/packages/jlg/php-adp-client) [![PHP Version Require](http://poser.pugx.org/jlg/php-adp-client/require/php)](https://packagist.org/packages/jlg/php-adp-client)
 
 ## Getting started
 

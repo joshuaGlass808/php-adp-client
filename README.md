@@ -20,7 +20,7 @@ $config = [
     'server_url'    => 'https://api.adp.com/'
 ];
 
-$adp = new \ADP\Client($config);
+$adp = new \Jlg\ADP\Client($config);
 
 $filter = "workers/workAssignments/assignmentStatus/statusCode/codeValue eq 'A'";
 $params = [
@@ -34,3 +34,14 @@ $params = [
 $httpResults =  json_decode($adp->get('hr/v2/workers', $params));
 $workers = ($httpResults) ? $httpResults->workers : [];
 ```
+
+### Methods
+  - `$adp->get($url, $requestPayload);`: sends a GET request to which ever ADP API endpoint you would like to use.
+  - `$adp->post($url, $requestPayload);`: sends a POST request to which ever ADP API endpoint you would like to use.
+  - `$adp->apiCall($requestType, $url, $requestPayload);`: sends an HTTP request to which ADP API endpoint specified in the `$url` parameter.
+
+### Additional Information
+  - Please refer to [ADP API Documentation Explorer](https://developers.adp.com/articles/api/hcm-offrg-wfn/apiexplorer "ADP API Explorer") for additional details on request parameters and what to expect from the response.
+  - This is using [Guzzle](https://github.com/guzzle/guzzle "Guzzle") for the Http abstraction. You will need to call `->getBody()->getContents()` on the response from one of the methods listed above if you would like to get the contents of the ADP Api response.
+
+

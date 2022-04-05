@@ -1,6 +1,6 @@
 <?php 
 
-namespace ADP;
+namespace Jlg\ADP;
 
 use GuzzleHttp\{
     Client as Http,
@@ -44,6 +44,7 @@ class Client
     public function apiCall(string $callType, string $url, array $parameters): HttpResponse
     {
         $this->checkAndResetConnection();
+        $callType = strtolower($callType);
 
         $http = new Http([
             'headers' => [

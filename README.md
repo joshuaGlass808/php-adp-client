@@ -1,5 +1,9 @@
 # Simple PHP ADP Client
 
+[![Latest Stable Version](https://poser.pugx.org/jlg/php-adp-client/v)](//packagist.org/packages/jlg/php-adp-client)
+[![License](https://poser.pugx.org/jlg/php-adp-client/license)](//packagist.org/packages/jlg/php-adp-client)
+[![Total Downloads](https://poser.pugx.org/jlg/php-adp-client/downloads)](//packagist.org/packages/jlg/php-adp-client)
+
 ## Getting started
 
 ```zsh

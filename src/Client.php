@@ -22,12 +22,12 @@ class Client
      * 
      * @param array $config - needs this shape:
      * [
-     *    'client_id'        => '********-****-****-****-************',
-     *    'client_secret'    => '********-****-****-****-************',
-     *    'org_name'         => 'ADP Org Name',
-     *    'ssl_cert_path'    => '/etc/ssl/adp/company_auth.pem',
-     *    'ssl_key_path'     => '/etc/ssl/adp/company_auth.key',
-     *    'server_url' => 'https://api.adp.com/'
+     *   'client_id'     => '********-****-****-****-************',
+     *   'client_secret' => '********-****-****-****-************',
+     *   'org_name'      => 'ADP Org Name',
+     *   'ssl_cert_path' => '/etc/ssl/adp/company_auth.pem',
+     *   'ssl_key_path'  => '/etc/ssl/adp/company_auth.key',
+     *   'server_url'    => 'https://api.adp.com/'
      *  ]
      */
     public function __construct(array $config)
@@ -136,11 +136,12 @@ class Client
 
         $response = $client->post('auth/oauth/v2/token', $params);
         $tokenData = json_decode($response->getBody()->getContents());
-
+        $time = "+{$tokenData->expires_in} seconds";
+        
         $this->accessToken = $tokenData->access_token;
-        $this->tokenType = $tokenData->token_type; // Bearer
-        $this->expiresAt = date('Y-m-d H:i:s', strtotime("+{$tokenData->expires_in} seconds")); // 3600s
-        $this->scope = $tokenData->scope; // api
+        $this->tokenType = $tokenData->token_type;
+        $this->expiresAt = date('Y-m-d H:i:s', strtotime($time));
+        $this->scope = $tokenData->scope;
     }
 
     /**

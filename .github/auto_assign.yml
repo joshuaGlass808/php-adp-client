@@ -1,0 +1,11 @@
+addReviewers: true
+addAssignees: author
+numberOfReviewers: 0
+useReviewGroups: true
+
+reviewGroups:
+  code-reviewers:
+    - jlrusso
+    - josephracca
+    - joshuaGlass808
+    - n8man

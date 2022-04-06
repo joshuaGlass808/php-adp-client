@@ -111,6 +111,109 @@ class Client
     }
 
     /**
+     * Get workers api meta data
+     * 
+     * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-v2-workers/apiexplorer?operation=GET/hr/v2/workers/meta
+     *
+     * @param array $filter
+     * @return HttpResponse
+     */
+    public function getWorkersMeta(array $filter = []): HttpResponse
+    {
+        $params = [
+            'query' => [
+                '$filter' => implode(' and ', $filter)
+            ]
+        ];
+
+        return $this->get('hr/v2/workers/meta', $params);
+    }
+
+    /**
+     * Get a single worker
+     * 
+     * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-v2-workers/apiexplorer?operation=GET/hr/v2/workers/{aoid}
+     *
+     * @param string $aoid
+     * @param array $select
+     * @return HttpResponse
+     */
+    public function getWorker(string $aoid, array $select = []): HttpResponse
+    {
+        $params = [
+            'query' => [
+                '$select' => implode(',', $select)
+            ]
+        ];
+
+        return $this->get("hr/v2/workers/{$aoid}", $params);
+    }
+
+    /**
+     * Simple wrapper around the Workers API
+     * 
+     * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-v2-workers/apiexplorer?operation=GET/hr/v2/workers
+     *
+     * @param array $filters
+     * @param integer $skip
+     * @param integer $top
+     * @param boolean $count
+     * @param array $select
+     * @return HttpResponse
+     */
+    public function getWorkers(
+        array $filters = [],
+        int $skip = 0,
+        int $top = 100,
+        bool $count = false,
+        array $select = [],
+    ): HttpResponse {
+        $params = [
+            'query' => [
+                '$filter' => implode(' and ', $filters),
+                '$top'    => $top,
+                '$skip'   => $skip,
+                '$select' => implode(',', $select),
+                '$count'  => $count
+            ]
+        ];
+       
+        return $this->get('hr/v2/workers', $params);
+    }
+
+    /**
+     * Get work assignment modification api meta data
+     * 
+     * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-work-assignment-management-v2-workers-work-assignment-management/apiexplorer?operation=GET/events/hr/v1/worker.work-assignment.modify/meta
+     *
+     * @param array $filter
+     * @return HttpResponse
+     */
+    public function getWorkAssignmentMeta(array $filter = []): HttpResponse
+    {
+        $params = [
+            'query' => [
+                '$filter' => implode(' and ', $filter)
+            ]
+        ];
+
+        return $this->get('events/​hr/​v1/​worker.work-assignment.modify/​meta', $params);
+    }
+ 
+    /**
+     * Modify work assignments
+     * 
+     * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-work-assignment-management-v2-workers-work-assignment-management/apiexplorer?operation=POST/events/hr/v1/worker.work-assignment.modify
+     *
+     * @param array $params
+     * @return HttpResponse
+     */
+    public function modifyWorkAssignment(array $params): HttpResponse
+    {
+        return $this->post('events/​hr/​v1/​worker.work-assignment.modify', $params);
+    }
+
+    /**
      * Make connection to ADP to get the access_token for future requests.
      *
      * @return void
@@ -129,7 +232,7 @@ class Client
 
         $client = new Http([
             'base_uri' => $this->baseConfig['server_url'],
-            'headers' => [
+            'headers'  => [
                 'User-Agent' => 'adp-connection-php/1.0.1'
             ],
         ]);

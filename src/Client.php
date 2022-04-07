@@ -115,18 +115,11 @@ class Client
      * 
      * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-v2-workers/apiexplorer?operation=GET/hr/v2/workers/meta
      *
-     * @param array $filter
      * @return HttpResponse
      */
-    public function getWorkersMeta(array $filter = []): HttpResponse
+    public function getWorkersMeta(): HttpResponse
     {
-        $params = [
-            'query' => [
-                '$filter' => implode(' and ', $filter)
-            ]
-        ];
-
-        return $this->get('hr/v2/workers/meta', $params);
+        return $this->get('hr/v2/workers/meta');
     }
 
     /**
@@ -186,18 +179,11 @@ class Client
      * 
      * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-work-assignment-management-v2-workers-work-assignment-management/apiexplorer?operation=GET/events/hr/v1/worker.work-assignment.modify/meta
      *
-     * @param array $filter
      * @return HttpResponse
      */
-    public function getWorkAssignmentMeta(array $filter = []): HttpResponse
+    public function getWorkAssignmentMeta(): HttpResponse
     {
-        $params = [
-            'query' => [
-                '$filter' => implode(' and ', $filter)
-            ]
-        ];
-
-        return $this->get('events/​hr/​v1/​worker.work-assignment.modify/​meta', $params);
+        return $this->get('events/​hr/​v1/​worker.work-assignment.modify/​meta');
     }
  
     /**

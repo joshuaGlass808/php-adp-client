@@ -38,9 +38,14 @@ $workers = ($httpResults) ? $httpResults->workers : [];
 ```
 
 ### Methods
-  - `$adp->get($url, $requestPayload);`: sends a GET request to which ever ADP API endpoint you would like to use.
-  - `$adp->post($url, $requestPayload);`: sends a POST request to which ever ADP API endpoint you would like to use.
-  - `$adp->apiCall($requestType, $url, $requestPayload);`: sends an HTTP request to which ADP API endpoint specified in the `$url` parameter.
+  - `$adp->getWorkersMeta();`: sends a GET request to retrieve workers api meta data.
+  - `$adp->getWorker($aoid, $select);`: gets a single worker based on workers AOID, and optional select array can be passed as a secondary argument. `$aoid` = string, `$select` = array - default `[]`
+  - `$adp->getWorkers($filters, $skip, $top, $count, $select);`: gets all workers in your ADP Org. `$filters` = array - default `[]`, `$skip` = int - default `0`, `$top` = int - default `100`, `$count` = bool - default `false`, `$select` = array - default `[]`
+  - `$adp->getWorkAssignmentMeta();`: sends a GET request to retrieve Work-Assignment api meta data.
+  - `$adp->modifyWorkAssignment($params);`: sends a POST request to modify a workers work assignment. `$params` = array - default `[]`
+  - `$adp->get($url, $requestPayload);`: sends a GET request to which ever ADP API endpoint you would like to use. `$url` = string, `$requestPayload` = array - default `[]`
+  - `$adp->post($url, $requestPayload);`: sends a POST request to which ever ADP API endpoint you would like to use. `$url` = string, `$requestPayload` = array - default `[]`
+  - `$adp->apiCall($requestType, $url, $requestPayload);`: sends an HTTP request to which ADP API endpoint specified in the `$url` parameter. `$requestType` = string, `$url` = string, `$requestPayload` = array - default `[]`
 
 ### Additional Information
   - Please refer to [ADP API Documentation Explorer](https://developers.adp.com/articles/api/hcm-offrg-wfn/apiexplorer "ADP API Explorer") for additional details on request parameters and what to expect from the response.

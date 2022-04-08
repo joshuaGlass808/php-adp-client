@@ -200,6 +200,17 @@ class Client
     }
 
     /**
+     * get contents from guzzle Http response.
+     *
+     * @param HttpResponse $response
+     * @return object
+     */
+    public static function getContents(HttpResponse $response): object
+    {
+        return json_decode($response->getBody()->getContents());
+    }
+
+    /**
      * Make connection to ADP to get the access_token for future requests.
      *
      * @return void

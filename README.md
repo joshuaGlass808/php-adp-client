@@ -37,20 +37,20 @@ $workers = ($httpResults) ? $httpResults->workers : [];
 ```
 
 ### Methods
-  - #### `getWorkersMeta()`
+  - #### `getWorkersMeta(): HttpResponse`
      + sends a GET request to retrieve workers api meta data.
      
      ```php 
      $adp->getWorkersMeta();
      ```
-  - #### `getWorker(string $aoid, array $select = []);`
+  - #### `getWorker(string $aoid, array $select = []): HttpResponse`
      + gets a single worker based on workers AOID
      + an optional select array can be passed as a secondary argument.
      
      ```php
      $adp->getWorker($aoid, $select);
      ```
-  - `getWorkers(array $filters = [], int $skip = 0, int $top = 100, bool $count = false, array $select = [])`
+  - `getWorkers(array $filters = [], int $skip = 0, int $top = 100, bool $count = false, array $select = []): HttpResponse`
      + gets all workers, but only returns `$top` records. 
      + You can use the `$skip` as a way of moving through all your users.
      
@@ -74,35 +74,40 @@ $workers = ($httpResults) ? $httpResults->workers : [];
      
      return $workers;
      ```
-     + In the future there will be a static method that will wrap getting the contents.
-     + In `v1.1.2` => `$results = $adp::getContents($adp->getWorkers())`
-  - `getWorkAssignmentMeta()`
-     + sends a GET request to retrieve Work-Assignment api meta data.
+    + In the future there will be a static method that will wrap getting the contents.
+    + In `v1.1.2` => `$results = $adp::getContents($adp->getWorkers())`
+  - `getWorkAssignmentMeta(): HttpResponse`
+    + sends a GET request to retrieve Work-Assignment api meta data.
      
      ```php
      $adp->getWorkAssignmentMeta();
      ```
-  - `modifyWorkAssignment(array $params = [])`
-     + sends a POST request to modify a workers work assignment.
+  - `static getContents(HttpResponse $response): HttpResponse`
+    + gets the contents from a guzzle Http Response.
+    ```php
+    $res = $adp::getContents($adp->getWorkers());
+    ```
+  - `modifyWorkAssignment(array $params = []): HttpResponse`
+    + sends a POST request to modify a workers work assignment.
      
      ```php
      $adp->modifyWorkAssignment($params);
      ```
-  - `get(string $url, array $requestPayload = [])`
-     + sends a GET request to which ever ADP API endpoint you would like to use.
+  - `get(string $url, array $requestPayload = []): HttpResponse`
+    + sends a GET request to which ever ADP API endpoint you would like to use.
      
      ```php
      $adp->get($url, $requestPayload);
      ```
-  - `post(string $url, array $requestPayload = [])`
-     + sends a POST request to which ever ADP API endpoint you would like to use.
+  - `post(string $url, array $requestPayload = []): HttpResponse`
+    + sends a POST request to which ever ADP API endpoint you would like to use.
      
      ```php
      $adp->post($url, $requestPayload);
      ```
-  - `apiCall(string $requestType, string $url, array $requestPayload = [])`
-     + sends an HTTP request to which ADP API endpoint specified in the `$url` parameter.
-     + `$requestType` needs to be either `'get'` or `'put'`
+  - `apiCall(string $requestType, string $url, array $requestPayload = []): HttpResponse`
+    + sends an HTTP request to which ADP API endpoint specified in the `$url` parameter.
+    + `$requestType` needs to be either `'get'` or `'put'`
      
      ```php
      $adp->apiCall('get', 'hr/v2/workers', []);

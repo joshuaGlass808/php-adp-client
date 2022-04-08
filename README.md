@@ -1,5 +1,4 @@
 # Simple PHP ADP Client
-
 [![Latest Stable Version](http://poser.pugx.org/jlg/php-adp-client/v)](https://packagist.org/packages/jlg/php-adp-client) [![Total Downloads](http://poser.pugx.org/jlg/php-adp-client/downloads)](https://packagist.org/packages/jlg/php-adp-client) [![License](http://poser.pugx.org/jlg/php-adp-client/license)](https://packagist.org/packages/jlg/php-adp-client)
 
 ## Getting started
@@ -38,14 +37,76 @@ $workers = ($httpResults) ? $httpResults->workers : [];
 ```
 
 ### Methods
-  - `$adp->getWorkersMeta();`: sends a GET request to retrieve workers api meta data.
-  - `$adp->getWorker($aoid, $select);`: gets a single worker based on workers AOID, and optional select array can be passed as a secondary argument. `$aoid` = string, `$select` = array - default `[]`
-  - `$adp->getWorkers($filters, $skip, $top, $count, $select);`: gets all workers in your ADP Org. `$filters` = array - default `[]`, `$skip` = int - default `0`, `$top` = int - default `100`, `$count` = bool - default `false`, `$select` = array - default `[]`
-  - `$adp->getWorkAssignmentMeta();`: sends a GET request to retrieve Work-Assignment api meta data.
-  - `$adp->modifyWorkAssignment($params);`: sends a POST request to modify a workers work assignment. `$params` = array - default `[]`
-  - `$adp->get($url, $requestPayload);`: sends a GET request to which ever ADP API endpoint you would like to use. `$url` = string, `$requestPayload` = array - default `[]`
-  - `$adp->post($url, $requestPayload);`: sends a POST request to which ever ADP API endpoint you would like to use. `$url` = string, `$requestPayload` = array - default `[]`
-  - `$adp->apiCall($requestType, $url, $requestPayload);`: sends an HTTP request to which ADP API endpoint specified in the `$url` parameter. `$requestType` = string, `$url` = string, `$requestPayload` = array - default `[]`
+  - #### `getWorkersMeta()`
+     + sends a GET request to retrieve workers api meta data.
+     
+     ```php 
+     $adp->getWorkersMeta();
+     ```
+  - #### `getWorker(string $aoid, array $select = []);`
+     + gets a single worker based on workers AOID
+     + an optional select array can be passed as a secondary argument.
+     
+     ```php
+     $adp->getWorker($aoid, $select);
+     ```
+  - `getWorkers(array $filters = [], int $skip = 0, int $top = 100, bool $count = false, array $select = [])`
+     + gets all workers, but only returns `$top` records. 
+     + You can use the `$skip` as a way of moving through all your users.
+     
+     ```php
+     $adp->getWorkers($filters, $skip, $top, $count, $select);
+     ```
+     + or you may need to get more than `$top`
+     
+     ```php
+     $fn = fn ($res) => $res->getBody()->getContents(); // php 8 thing.
+     
+     $workers = [];
+     $filters = ["workers/workAssignments/assignmentStatus/statusCode/codeValue eq 'A'"]; // you probably want to use a filter :)
+     $top = 100;
+     $skip = 0; 
+     
+     while (($results = $fn($adp->getWorkers($filters, $skip, $top)) !== null) {
+         $workers = array_merge($workers, $results->workers);
+         $skip += $top;
+     }
+     
+     return $workers;
+     ```
+     + In the future there will be a static method that will wrap getting the contents.
+     + In `v1.1.2` => `$results = $adp::getContents($adp->getWorkers())`
+  - `getWorkAssignmentMeta()`
+     + sends a GET request to retrieve Work-Assignment api meta data.
+     
+     ```php
+     $adp->getWorkAssignmentMeta();
+     ```
+  - `modifyWorkAssignment(array $params = [])`
+     + sends a POST request to modify a workers work assignment.
+     
+     ```php
+     $adp->modifyWorkAssignment($params);
+     ```
+  - `get(string $url, array $requestPayload = [])`
+     + sends a GET request to which ever ADP API endpoint you would like to use.
+     
+     ```php
+     $adp->get($url, $requestPayload);
+     ```
+  - `post(string $url, array $requestPayload = [])`
+     + sends a POST request to which ever ADP API endpoint you would like to use.
+     
+     ```php
+     $adp->post($url, $requestPayload);
+     ```
+  - `apiCall(string $requestType, string $url, array $requestPayload = [])`
+     + sends an HTTP request to which ADP API endpoint specified in the `$url` parameter.
+     + `$requestType` needs to be either `'get'` or `'put'`
+     
+     ```php
+     $adp->apiCall('get', 'hr/v2/workers', []);
+     ```
 
 ### Additional Information
   - Please refer to [ADP API Documentation Explorer](https://developers.adp.com/articles/api/hcm-offrg-wfn/apiexplorer "ADP API Explorer") for additional details on request parameters and what to expect from the response.

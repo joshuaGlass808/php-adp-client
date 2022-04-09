@@ -1,5 +1,5 @@
 # Simple PHP ADP Client
-[![Latest Stable Version](http://poser.pugx.org/jlg/php-adp-client/v)](https://packagist.org/packages/jlg/php-adp-client) [![Total Downloads](http://poser.pugx.org/jlg/php-adp-client/downloads)](https://packagist.org/packages/jlg/php-adp-client) [![License](http://poser.pugx.org/jlg/php-adp-client/license)](https://packagist.org/packages/jlg/php-adp-client)
+[![Latest Stable Version](http://poser.pugx.org/jlg/php-adp-client/version)](https://packagist.org/packages/jlg/php-adp-client) [![Total Downloads](http://poser.pugx.org/jlg/php-adp-client/downloads)](https://packagist.org/packages/jlg/php-adp-client) [![License](http://poser.pugx.org/jlg/php-adp-client/license)](https://packagist.org/packages/jlg/php-adp-client)
 
 ## Getting started
 
@@ -32,7 +32,7 @@ $params = [
     ]
 ];
 
-$httpResults =  json_decode($adp->get('hr/v2/workers', $params));
+$httpResults =  json_decode($adp::getContents($adp->get('hr/v2/workers', $params)));
 $workers = ($httpResults) ? $httpResults->workers : [];
 ```
 
@@ -59,34 +59,25 @@ $workers = ($httpResults) ? $httpResults->workers : [];
      ```
      + or you may need to get more than `$top`
      
-     ```php
-     $fn = fn ($res) => $res->getBody()->getContents(); // php 8 thing.
-     
+     ```php     
      $workers = [];
      $filters = ["workers/workAssignments/assignmentStatus/statusCode/codeValue eq 'A'"]; // you probably want to use a filter :)
      $top = 100;
      $skip = 0; 
      
-     while (($results = $fn($adp->getWorkers($filters, $skip, $top)) !== null) {
-         $workers = array_merge($workers, $results->workers);
+     while (($results = $adp::getContents($adp->getWorkers($filters, $skip, $top)) !== null) {
+         $workers = array_merge($workers, json_decode($results)->workers);
          $skip += $top;
      }
      
      return $workers;
      ```
-    + In the future there will be a static method that will wrap getting the contents.
-    + In `v1.1.2` => `$results = $adp::getContents($adp->getWorkers())`
   - #### `getWorkAssignmentMeta(): HttpResponse`
     + sends a GET request to retrieve Work-Assignment api meta data.
      
      ```php
      $adp->getWorkAssignmentMeta();
      ```
-  - #### `static getContents(HttpResponse $response): HttpResponse`
-    + gets the contents from a guzzle Http Response.
-    ```php
-    $res = $adp::getContents($adp->getWorkers());
-    ```
   - #### `modifyWorkAssignment(array $params = []): HttpResponse`
     + sends a POST request to modify a workers work assignment.
      
@@ -112,6 +103,11 @@ $workers = ($httpResults) ? $httpResults->workers : [];
      ```php
      $adp->apiCall('get', 'hr/v2/workers', []);
      ```
+  - #### `static getContents(HttpResponse $response): HttpResponse`
+    + gets the contents from a guzzle Http Response.
+    ```php
+    $res = $adp::getContents($adp->getWorkers());
+    ```
 
 ### Additional Information
   - Please refer to [ADP API Documentation Explorer](https://developers.adp.com/articles/api/hcm-offrg-wfn/apiexplorer "ADP API Explorer") for additional details on request parameters and what to expect from the response.

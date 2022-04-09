@@ -263,13 +263,11 @@ class Client
             ],
         ]);
 
-        $response = $client->post('auth/oauth/v2/token', $params);
-        $tokenData = json_decode($response->getBody()->getContents());
-        $time = "+{$tokenData->expires_in} seconds";
-        
+        $tokenData = self::getContents($client->post('auth/oauth/v2/token', $params));
+        $time = strtotime("+{$tokenData->expires_in} seconds");
         $this->accessToken = $tokenData->access_token;
         $this->tokenType = $tokenData->token_type;
-        $this->expiresAt = date('Y-m-d H:i:s', strtotime($time));
+        $this->expiresAt = date('Y-m-d H:i:s', $time);
         $this->scope = $tokenData->scope;
     }
 

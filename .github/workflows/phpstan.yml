@@ -14,5 +14,4 @@ jobs:
         with:
           path: src/
           level: max
-          universalObjectCratesClasses:
-            - object
+          universalObjectCratesClasses: object

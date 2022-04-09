@@ -18,5 +18,8 @@
     "require": {
         "guzzlehttp/guzzle": "^6.3"
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "phpstan/phpstan": "^1.5"
+    }
 }

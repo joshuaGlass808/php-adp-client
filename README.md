@@ -32,7 +32,7 @@ $params = [
     ]
 ];
 
-$httpResults =  json_decode($adp::getContents($adp->get('hr/v2/workers', $params)));
+$httpResults =  $adp::getContents($adp->get('hr/v2/workers', $params));
 $workers = ($httpResults) ? $httpResults->workers : [];
 ```
 
@@ -66,7 +66,7 @@ $workers = ($httpResults) ? $httpResults->workers : [];
      $skip = 0; 
      
      while (($results = $adp::getContents($adp->getWorkers($filters, $skip, $top)) !== null) {
-         $workers = array_merge($workers, json_decode($results)->workers);
+         $workers = array_merge($workers, $results->workers);
          $skip += $top;
      }
      

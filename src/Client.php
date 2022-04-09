@@ -231,10 +231,10 @@ class Client
     /**
      * get contents from guzzle Http response.
      *
-     * @param HttpResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @return object
      */
-    public static function getContents(HttpResponse $response): object
+    public static function getContents(\Psr\Http\Message\ResponseInterface $response): object
     {
         return json_decode($response->getBody()->getContents());
     }

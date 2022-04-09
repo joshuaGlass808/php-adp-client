@@ -11,10 +11,39 @@ use GuzzleHttp\{
 
 class Client
 {
+    /**
+     * base config
+     *
+     * @var array<mixed>
+     */
     protected array $baseConfig = [];
+
+    /**
+     * Access Token
+     *
+     * @var string|null
+     */
     protected ?string $accessToken = null;
+
+    /**
+     * Token type, usually Bearer
+     *
+     * @var string|null
+     */
     protected ?string $tokenType = null;
+
+    /**
+     * Expires at date string
+     *
+     * @var string|null
+     */
     protected ?string $expiresAt = null;
+
+    /**
+     * Scope - usually set to API
+     *
+     * @var string|null
+     */
     protected ?string $scope = null;
 
     /**

@@ -11,16 +11,16 @@ use GuzzleHttp\{
 
 class Client
 {
-    protected $baseConfig = [];
-    protected $accessToken = null;
-    protected $tokenType = null;
-    protected $expiresAt = null;
-    protected $scope = null;
+    protected array $baseConfig = [];
+    protected ?string $accessToken = null;
+    protected ?string $tokenType = null;
+    protected ?string $expiresAt = null;
+    protected ?string $scope = null;
 
     /**
      * Construct ADP connection client
      * 
-     * @param array $config - needs this shape:
+     * @param array<mixed> $config - needs this shape:
      * [
      *   'client_id'     => '********-****-****-****-************',
      *   'client_secret' => '********-****-****-****-************',
@@ -61,7 +61,7 @@ class Client
      * Make requests to ADP.
      * 
      * @param string $url - example => "hr/v2/workers"
-     * @param array $parameters - payload for the request
+     * @param array<array> $parameters - payload for the request
      * @return HttpResponse
      */
     public function apiCall(string $callType, string $url, array $parameters): HttpResponse
@@ -90,7 +90,7 @@ class Client
      * Convienence wrapper for GET requests around apiCall()
      * 
      * @param string $url - example => "hr/v2/workers"
-     * @param array $parameters - payload for the request
+     * @param array<array> $parameters - payload for the request
      * @return HttpResponse
      */
     public function get(string $url, array $parameters = []): HttpResponse
@@ -102,7 +102,7 @@ class Client
      * Convienence wrapper for POST requests around apiCall()
      * 
      * @param string $url - example => "hr/v2/workers"
-     * @param array $parameters - payload for the request
+     * @param array<array> $parameters - payload for the request
      * @return HttpResponse
      */
     public function post(string $url, array $parameters = []): HttpResponse
@@ -128,7 +128,7 @@ class Client
      * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-v2-workers/apiexplorer?operation=GET/hr/v2/workers/{aoid}
      *
      * @param string $aoid
-     * @param array $select
+     * @param array<string> $select
      * @return HttpResponse
      */
     public function getWorker(string $aoid, array $select = []): HttpResponse
@@ -147,11 +147,11 @@ class Client
      * 
      * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-v2-workers/apiexplorer?operation=GET/hr/v2/workers
      *
-     * @param array $filters
+     * @param array<string> $filters
      * @param integer $skip
      * @param integer $top
      * @param boolean $count
-     * @param array $select
+     * @param array<string> $select
      * @return HttpResponse
      */
     public function getWorkers(

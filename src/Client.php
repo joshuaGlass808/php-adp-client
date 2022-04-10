@@ -243,7 +243,7 @@ class Client
      * Make connection to ADP to get the access_token for future requests.
      *
      *
-     * @property mixed object::$access_token
+     * @property object $access_token
      * @return void
      */
     protected function setConnection(): void

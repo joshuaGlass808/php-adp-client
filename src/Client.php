@@ -119,7 +119,7 @@ class Client
      * Convienence wrapper for GET requests around apiCall()
      * 
      * @param string $url - example => "hr/v2/workers"
-     * @param array<array<string>> $parameters - payload for the request
+     * @param array<array> $parameters - payload for the request
      * @return HttpResponse
      */
     public function get(string $url, array $parameters = []): HttpResponse

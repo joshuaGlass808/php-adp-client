@@ -318,13 +318,14 @@ class Client
             return;
         }
 
-        if (file_exists($this->tmpJsonFile)) {
+        if (
+            file_exists($this->tmpJsonFile)
+            && filesize($this->tmpJsonFile) > 0
+        ) {
             $fp = fopen($this->tmpJsonFile, 'r');
-            $data = fread($fp, filesize($this->tmpJsonFile));
+            $data = json_decode(fread($fp, filesize($this->tmpJsonFile)));
             fclose($fp);
     
-            $data = json_decode($data);
-
             if (
                 isset($data->expires_at) 
                 && isset($data->access_token)

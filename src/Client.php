@@ -119,7 +119,7 @@ class Client
      * Convienence wrapper for GET requests around apiCall()
      * 
      * @param string $url - example => "hr/v2/workers"
-     * @param array<array> $parameters - payload for the request
+     * @param array<array<string>> $parameters - payload for the request
      * @return HttpResponse
      */
     public function get(string $url, array $parameters = []): HttpResponse
@@ -220,7 +220,7 @@ class Client
      * 
      * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-work-assignment-management-v2-workers-work-assignment-management/apiexplorer?operation=POST/events/hr/v1/worker.work-assignment.modify
      *
-     * @param array $params
+     * @param array<array> $params
      * @return HttpResponse
      */
     public function modifyWorkAssignment(array $params): HttpResponse

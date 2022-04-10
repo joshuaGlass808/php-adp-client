@@ -11,16 +11,45 @@ use GuzzleHttp\{
 
 class Client
 {
-    protected $baseConfig = [];
-    protected $accessToken = null;
-    protected $tokenType = null;
-    protected $expiresAt = null;
-    protected $scope = null;
+    /**
+     * base config
+     *
+     * @var array<mixed>
+     */
+    protected array $baseConfig = [];
+
+    /**
+     * Access Token
+     *
+     * @var string|null
+     */
+    protected ?string $accessToken = null;
+
+    /**
+     * Token type, usually Bearer
+     *
+     * @var string|null
+     */
+    protected ?string $tokenType = null;
+
+    /**
+     * Expires at date string
+     *
+     * @var string|null
+     */
+    protected ?string $expiresAt = null;
+
+    /**
+     * Scope - usually set to API
+     *
+     * @var string|null
+     */
+    protected ?string $scope = null;
 
     /**
      * Construct ADP connection client
      * 
-     * @param array $config - needs this shape:
+     * @param array<mixed> $config - needs this shape:
      * [
      *   'client_id'     => '********-****-****-****-************',
      *   'client_secret' => '********-****-****-****-************',
@@ -61,7 +90,7 @@ class Client
      * Make requests to ADP.
      * 
      * @param string $url - example => "hr/v2/workers"
-     * @param array $parameters - payload for the request
+     * @param array<array> $parameters - payload for the request
      * @return HttpResponse
      */
     public function apiCall(string $callType, string $url, array $parameters): HttpResponse
@@ -90,7 +119,7 @@ class Client
      * Convienence wrapper for GET requests around apiCall()
      * 
      * @param string $url - example => "hr/v2/workers"
-     * @param array $parameters - payload for the request
+     * @param array<array> $parameters - payload for the request
      * @return HttpResponse
      */
     public function get(string $url, array $parameters = []): HttpResponse
@@ -102,7 +131,7 @@ class Client
      * Convienence wrapper for POST requests around apiCall()
      * 
      * @param string $url - example => "hr/v2/workers"
-     * @param array $parameters - payload for the request
+     * @param array<array> $parameters - payload for the request
      * @return HttpResponse
      */
     public function post(string $url, array $parameters = []): HttpResponse
@@ -128,7 +157,7 @@ class Client
      * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-v2-workers/apiexplorer?operation=GET/hr/v2/workers/{aoid}
      *
      * @param string $aoid
-     * @param array $select
+     * @param array<string> $select
      * @return HttpResponse
      */
     public function getWorker(string $aoid, array $select = []): HttpResponse
@@ -147,11 +176,11 @@ class Client
      * 
      * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-v2-workers/apiexplorer?operation=GET/hr/v2/workers
      *
-     * @param array $filters
+     * @param array<string> $filters
      * @param integer $skip
      * @param integer $top
      * @param boolean $count
-     * @param array $select
+     * @param array<string> $select
      * @return HttpResponse
      */
     public function getWorkers(
@@ -191,7 +220,7 @@ class Client
      * 
      * https://developers.adp.com/articles/api/hcm-offrg-wfn/hcm-offrg-wfn-hr-workers-work-assignment-management-v2-workers-work-assignment-management/apiexplorer?operation=POST/events/hr/v1/worker.work-assignment.modify
      *
-     * @param array $params
+     * @param array<array> $params
      * @return HttpResponse
      */
     public function modifyWorkAssignment(array $params): HttpResponse
@@ -202,10 +231,10 @@ class Client
     /**
      * get contents from guzzle Http response.
      *
-     * @param HttpResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @return object
      */
-    public static function getContents(HttpResponse $response): object
+    public static function getContents(\Psr\Http\Message\ResponseInterface $response): object
     {
         return json_decode($response->getBody()->getContents());
     }
@@ -213,6 +242,8 @@ class Client
     /**
      * Make connection to ADP to get the access_token for future requests.
      *
+     *
+     * @property object $access_token
      * @return void
      */
     protected function setConnection(): void
@@ -234,13 +265,11 @@ class Client
             ],
         ]);
 
-        $response = $client->post('auth/oauth/v2/token', $params);
-        $tokenData = json_decode($response->getBody()->getContents());
-        $time = "+{$tokenData->expires_in} seconds";
-        
+        $tokenData = self::getContents($client->post('auth/oauth/v2/token', $params));
+        $time = strtotime("+{$tokenData->expires_in} seconds");
         $this->accessToken = $tokenData->access_token;
         $this->tokenType = $tokenData->token_type;
-        $this->expiresAt = date('Y-m-d H:i:s', strtotime($time));
+        $this->expiresAt = date('Y-m-d H:i:s', $time);
         $this->scope = $tokenData->scope;
     }
 

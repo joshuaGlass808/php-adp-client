@@ -5,7 +5,7 @@ namespace Jlg\ADP\Exceptions;
 class ADPClientValidationException extends \Exception
 {
     // Redefine the exception so message isn't optional
-    public function __construct(string $message, int $code = 0, Throwable $previous = null)
+    public function __construct(string $message, int $code = 0, \Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

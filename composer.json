@@ -1,6 +1,5 @@
 {
     "name": "jlg/php-adp-client",
-    "type": "project",
     "homepage": "https://github.com/joshuaGlass808/php-adp-client",
     "description": "Simple PHP ADP connection client.",
     "license": "MIT",
@@ -18,5 +17,8 @@
     "require": {
         "guzzlehttp/guzzle": "^6.3"
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "phpstan/phpstan": "^1.5"
+    }
 }

@@ -204,7 +204,7 @@ class Client
         }
 
         if (!empty($select)) {
-            $params['query']['$filter'] = implode(',', $select);
+            $params['query']['$select'] = implode(',', $select);
         }
 
         if ($skip !== null) {

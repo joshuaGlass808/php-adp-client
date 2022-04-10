@@ -12,6 +12,13 @@ use GuzzleHttp\{
 class Client
 {
     /**
+     * temp path to cache the temp access token.
+     *
+     * @var string
+     */
+    protected string $tmpJsonFile = '/tmp/jlg-adp-token-cache.json';
+
+    /**
      * base config
      *
      * @var array<mixed>
@@ -83,7 +90,7 @@ class Client
         }
 
         $this->baseConfig = $config;
-        $this->setConnection();
+        $this->checkAndResetConnection();
     }
 
     /**
@@ -185,20 +192,32 @@ class Client
      */
     public function getWorkers(
         array $filters = [],
-        int $skip = 0,
-        int $top = 100,
+        ?int $skip = null,
+        ?int $top = null,
         bool $count = false,
         array $select = [],
     ): HttpResponse {
-        $params = [
-            'query' => [
-                '$filter' => implode(' and ', $filters),
-                '$top'    => $top,
-                '$skip'   => $skip,
-                '$select' => implode(',', $select),
-                '$count'  => $count
-            ]
-        ];
+        $params = ['query' => []];
+
+        if (!empty($filters)) {
+            $params['query']['$filter'] = implode(' and ', $filters);
+        }
+
+        if (!empty($select)) {
+            $params['query']['$filter'] = implode(',', $select);
+        }
+
+        if ($skip !== null) {
+            $params['query']['$skip'] = $skip;
+        }
+
+        if ($top !== null) {
+            $params['query']['$top'] = $top;
+        }
+
+        if ($count) {
+            $params['query']['$count'] = $count;
+        }
        
         return $this->get('hr/v2/workers', $params);
     }
@@ -232,9 +251,9 @@ class Client
      * get contents from guzzle Http response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
-     * @return object
+     * @return object|null
      */
-    public static function getContents(\Psr\Http\Message\ResponseInterface $response): object
+    public static function getContents(\Psr\Http\Message\ResponseInterface $response): ?object
     {
         return json_decode($response->getBody()->getContents());
     }
@@ -267,10 +286,21 @@ class Client
 
         $tokenData = self::getContents($client->post('auth/oauth/v2/token', $params));
         $time = strtotime("+{$tokenData->expires_in} seconds");
+        $date = date('Y-m-d H:i:s', $time);
         $this->accessToken = $tokenData->access_token;
         $this->tokenType = $tokenData->token_type;
-        $this->expiresAt = date('Y-m-d H:i:s', $time);
+        $this->expiresAt = $date;
         $this->scope = $tokenData->scope;
+
+        $fileData = [
+            'expires_at'   => $date,
+            'token_type'   => $this->tokenType,
+            'access_token' => $this->accessToken
+        ];
+
+        $fp = fopen($this->tmpJsonFile, 'w');
+        fwrite($fp, json_encode($fileData));
+        fclose($fp);
     }
 
     /**
@@ -281,10 +311,38 @@ class Client
     protected function checkAndResetConnection(): void
     {
         if (
-            $this->expiresAt === null
-            || date('Y-m-d H:i:s') >= $this->expiresAt
+            $this->expiresAt !== null 
+            && date('Y-m-d H:i:s') < $this->expiresAt
+            && $this->accessToken !== null
         ) {
-            $this->setConnection();
+            return;
         }
+
+        if (file_exists($this->tmpJsonFile)) {
+            $fp = fopen($this->tmpJsonFile, 'r');
+            $data = fread($fp, filesize($this->tmpJsonFile));
+            fclose($fp);
+    
+            $data = json_decode($data);
+
+            if (
+                isset($data->expires_at) 
+                && isset($data->access_token)
+                && isset($data->token_type)
+                && date('Y-m-d H:i:s') < $data->expires_at
+            ) {
+                $this->expiresAt = $data->expires_at;
+                $this->accessToken = $data->access_token;
+                $this->tokenType = $data->token_type;
+                return;
+            }
+
+            $this->expiresAt = null;
+            $this->accessToken = null;
+            $this->tokenType = null;
+            unlink($this->tmpJsonFile);
+        }
+
+        $this->setConnection();
     }
 }

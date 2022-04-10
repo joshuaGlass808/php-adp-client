@@ -65,7 +65,7 @@ $workers = ($httpResults) ? $httpResults->workers : [];
      $top = 100;
      $skip = 0; 
      
-     while (($results = $adp::getContents($adp->getWorkers($filters, $skip, $top)) !== null) {
+     while (($results = $adp::getContents($adp->getWorkers($filters, $skip, $top))) !== null) {
          $workers = array_merge($workers, $results->workers);
          $skip += $top;
      }

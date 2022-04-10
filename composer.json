@@ -1,6 +1,5 @@
 {
     "name": "jlg/php-adp-client",
-    "type": "project",
     "homepage": "https://github.com/joshuaGlass808/php-adp-client",
     "description": "Simple PHP ADP connection client.",
     "license": "MIT",

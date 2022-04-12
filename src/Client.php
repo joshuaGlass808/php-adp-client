@@ -195,7 +195,7 @@ class Client
         ?int $skip = null,
         ?int $top = null,
         bool $count = false,
-        array $select = [],
+        array $select = []
     ): HttpResponse {
         $params = ['query' => []];
 

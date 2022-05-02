@@ -105,7 +105,7 @@ class Client
         $this->checkAndResetConnection();
         $callType = strtolower($callType);
 
-        if (!in_array($callType, ['get', 'post'])) {
+        if (!in_array($callType, ['get', 'post', 'delete'])) {
             $msg = "Invalid|unsupported http request type {$callType}. Valid options are (get|post)";
             throw new ADPClientValidationException($msg);
         }
@@ -120,6 +120,18 @@ class Client
         ]);
 
         return $http->{$callType}($url, $parameters);
+    }
+
+    /**
+     * Convienence wrapper for DELETE requests around apiCall()
+     *
+     * @param string $url
+     * @param array $parameters
+     * @return HttpResponse
+     */
+    public function delete(string $url, array $parameters = []): HttpResponse
+    {
+        return $this->apiCall('delete', $url, $parameters);
     }
 
     /**
@@ -229,13 +241,24 @@ class Client
     }
 
     /**
-     * Get event notification messages. Generally used in Long Polling situations
+     * Get an event notification messages. Generally used in Long Polling situations
      *
      * @return HttpResponse
      */
     public function getEventNotificationMessages(): HttpResponse
     {
         return $this->get('core/v1/event-notification-messages');
+    }
+
+    /**
+     * Delete an event notification message
+     *
+     * @param string $adpMsgId
+     * @return HttpResponse
+     */
+    public function deleteEventNotificationMessage(string $adpMsgId): HttpResponse
+    {
+        return $this->delete("core/v1/event-notification-messages/{$adpMsgId}");
     }
 
     /**

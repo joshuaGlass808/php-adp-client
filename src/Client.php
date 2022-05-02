@@ -169,11 +169,12 @@ class Client
      */
     public function getWorker(string $aoid, array $select = []): HttpResponse
     {
-        $params = [
-            'query' => [
+        $params = [];
+        if (!empty($select)) {
+            $params['query'] = [
                 '$select' => implode(',', $select)
-            ]
-        ];
+            ];
+        }
 
         return $this->get("hr/v2/workers/{$aoid}", $params);
     }
@@ -197,29 +198,44 @@ class Client
         bool $count = false,
         array $select = []
     ): HttpResponse {
-        $params = ['query' => []];
+        $params = [];
+        $query = [];
 
         if (!empty($filters)) {
-            $params['query']['$filter'] = implode(' and ', $filters);
+            $query['$filter'] = implode(' and ', $filters);
         }
 
         if (!empty($select)) {
-            $params['query']['$select'] = implode(',', $select);
+            $query['$select'] = implode(',', $select);
         }
 
         if ($skip !== null) {
-            $params['query']['$skip'] = $skip;
+            $query['$skip'] = $skip;
         }
 
         if ($top !== null) {
-            $params['query']['$top'] = $top;
+            $query['$top'] = $top;
         }
 
         if ($count) {
-            $params['query']['$count'] = $count;
+            $query['$count'] = $count;
+        }
+
+        if (!empty($query)) {
+            $params['query'] = $query;
         }
        
         return $this->get('hr/v2/workers', $params);
+    }
+
+    /**
+     * Get event notification messages. Generally used in Long Polling situations
+     *
+     * @return HttpResponse
+     */
+    public function getEventNotificationMessages(): HttpResponse
+    {
+        return $this->get('core/v1/event-notification-messages');
     }
 
     /**
